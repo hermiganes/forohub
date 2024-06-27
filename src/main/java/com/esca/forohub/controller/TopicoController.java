@@ -65,7 +65,8 @@ public class TopicoController {
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity actualizarTopico(@PathVariable @Valid Long id, @RequestBody @Valid DatosActualizarTopico datosActualizarTopico){
+    public ResponseEntity actualizarTopico(@PathVariable @Valid Long id,
+                                           @RequestBody @Valid DatosActualizarTopico datosActualizarTopico){
         Topico topico = topicoRepository.getReferenceById(id);
         Long cursoId = Long.parseLong(datosActualizarTopico.cursoId());
         Long autorId = Long.parseLong(datosActualizarTopico.autorId());
@@ -87,10 +88,14 @@ public class TopicoController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity borrarTopicoDb (@PathVariable @Valid Long id){
-        Topico topico = topicoRepository.getReferenceById(id);
-        //System.out.println(topico);
-        topicoRepository.delete(topico);
+    public ResponseEntity borrarTopicoDb (@PathVariable @Valid Long id,
+                                          @RequestParam(name = "borrar", defaultValue = "false") @Valid boolean borrar){
+        if (borrar){
+            topicoRepository.deleteById(id);
+        } else {
+            Topico topico = topicoRepository.getReferenceById(id);
+            topico.desactivarTopico();
+        }
         return ResponseEntity.noContent().build();
     }
 

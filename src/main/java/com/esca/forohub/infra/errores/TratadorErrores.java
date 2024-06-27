@@ -1,6 +1,9 @@
-package com.esca.forohub.infra;
+package com.esca.forohub.infra.errores;
 
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -9,14 +12,15 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.sql.SQLException;
-
 @RestControllerAdvice
 public class TratadorErrores {
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity error404() {
-        return  ResponseEntity.notFound().build();
+    public ResponseEntity error404(EntityNotFoundException e) {
+        var error = e.getLocalizedMessage();
+        return ResponseEntity.status(404).body(error);
     }
+
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity validacionDatosEntrada(MethodArgumentNotValidException e){
@@ -30,6 +34,7 @@ public class TratadorErrores {
         //var error = e.getRootCause();
         return ResponseEntity.badRequest().body(error);
     }
+
 
     public record DatosErrorSql(String error, String mensaje){
         DatosErrorSql(Throwable error){

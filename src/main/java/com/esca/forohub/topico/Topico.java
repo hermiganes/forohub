@@ -26,7 +26,7 @@ public class Topico {
     private LocalDateTime fecha;
     private Boolean status;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne( fetch = FetchType.EAGER)
     @JoinColumn(name = "autor_id")
     private Usuario autor;
 
@@ -48,5 +48,9 @@ public class Topico {
     public void actulizarTopico(DatosActualizarTopico datosActualizarTopico) {
         this.titulo = datosActualizarTopico.titulo();
         this.mensaje = datosActualizarTopico.mensaje();
+    }
+
+    public void desactivarTopico() {
+        this.status = false;
     }
 }

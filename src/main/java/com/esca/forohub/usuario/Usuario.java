@@ -1,12 +1,18 @@
 package com.esca.forohub.usuario;
 
 import com.esca.forohub.perfiles.Perfil;
+import com.esca.forohub.topico.Topico;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,13 +22,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Usuario {
+public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+    //@JoinColumn(name = "nombre_usuario")
     private String nombreUsuario;
     private String correo;
     private String contrasena;
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL)
+    private List<Topico> topicos = new ArrayList<>();
     @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
     private List <Perfil> perfil;
 
@@ -30,5 +39,40 @@ public class Usuario {
         this.nombreUsuario = datosRegistroUsuario.nombre();
         this.correo = datosRegistroUsuario.correoElectronico();
         this.contrasena = datosRegistroUsuario.contrasena();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return contrasena;
+    }
+
+    @Override
+    public String getUsername() {
+        return nombreUsuario;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;//UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;//UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;//UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;//UserDetails.super.isEnabled();
     }
 }

@@ -1,10 +1,14 @@
 package com.esca.forohub.usuario;
 
 import com.esca.forohub.perfiles.DatosRegistroPerfil;
+import jakarta.validation.constraints.NotBlank;
 
 public record DatosRegistroUsuario(
+        @NotBlank
         String nombre,
-        String correoElectronico,
+        @NotBlank
+        String correo,
+        @NotBlank
         String contrasena,
         DatosRegistroPerfil perfil
 ) {

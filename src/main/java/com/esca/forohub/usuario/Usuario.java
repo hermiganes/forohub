@@ -3,22 +3,19 @@ package com.esca.forohub.usuario;
 import com.esca.forohub.perfiles.Perfil;
 import com.esca.forohub.topico.Topico;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Table(name= "usuarios")
 @Entity(name = "Usuario")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -37,7 +34,7 @@ public class Usuario implements UserDetails {
 
     public Usuario(DatosRegistroUsuario datosRegistroUsuario) {
         this.nombreUsuario = datosRegistroUsuario.nombre();
-        this.correo = datosRegistroUsuario.correoElectronico();
+        this.correo = datosRegistroUsuario.correo();
         this.contrasena = datosRegistroUsuario.contrasena();
     }
 

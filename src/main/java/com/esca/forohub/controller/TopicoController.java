@@ -33,8 +33,6 @@ public class TopicoController {
     @PostMapping
     public ResponseEntity registarTopico(@RequestBody @Valid DatosRegistroTopico parametro,
                                          UriComponentsBuilder uriComponentsBuilder){
-        //System.out.println(" Llega el request ");
-        System.out.println(parametro);
         Long autorId = Long.parseLong(parametro.autorId());
         Long cursoId = Long.parseLong(parametro.cursoId());
         Optional<Usuario> autorBase = usuarioRepository.findById(autorId);
@@ -52,16 +50,19 @@ public class TopicoController {
         }
     }//Final registrar Topico
 
+
     @GetMapping
     public ResponseEntity<Page<DatosListadoTopico>> listarTopicos(@PageableDefault(size = 10, sort = "fecha") Pageable paginacion){
         return ResponseEntity.ok(topicoRepository.findAll(paginacion).map(DatosListadoTopico::new));
     } // Listar todos los topicos
+
 
     @GetMapping("/{id}")
     public ResponseEntity mostrarMedico(@PathVariable @Valid Long id){
         Topico topico = topicoRepository.getReferenceById(id);
         return ResponseEntity.ok(new DatosListadoTopico(topico));
     } // mostrar topico por id
+
 
     @PutMapping("/{id}")
     @Transactional

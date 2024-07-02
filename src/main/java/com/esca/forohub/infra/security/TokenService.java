@@ -34,12 +34,6 @@ public class TokenService {
     }
 
     public String getSubject(String tokenJWT) {
-//        Algorithm algoritmo = Algorithm.HMAC256(claveToken);
-//        return JWT.require(algoritmo)
-//                .withIssuer("esca")
-//                .build()
-//                .verify(tokenJWT)
-//                .getSubject();
         try {
             Algorithm algoritmo = Algorithm.HMAC256(claveToken);
             return JWT.require(algoritmo)
